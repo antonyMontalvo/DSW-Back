@@ -8,5 +8,14 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongoose": "^5.4.22",
+    "socket.io": "^2.2.0",
+    "stripe": "^6.28.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
 }
