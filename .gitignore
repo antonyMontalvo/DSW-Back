@@ -1,3 +1,9 @@
-#globals
-
+#global node modules
 node_modules/
+
+#principal configuration
+src/config.js
+src/info.json
+
+#public images
+src/public/
