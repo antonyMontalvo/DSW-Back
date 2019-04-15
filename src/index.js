@@ -2,7 +2,7 @@ const morgan = require('morgan'),
   cors = require('cors'),
   express = require('express'),
   app = express(),
-  ioServer = require('./server/index')(app),
+  // ioServer = require('./server/index')(app),
   PORT = (process.env.PORT || 5000);
 
 /*
@@ -38,7 +38,12 @@ app.use((req, res, next) => {
 /*
   Server start
 */
-ioServer.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server runing on: http://localhost:${PORT}`);
   console.log(`Socket server running`);
 });
+
+// ioServer.listen(PORT, () => {
+//   console.log(`Server runing on: http://localhost:${PORT}`);
+//   console.log(`Socket server running`);
+// });
