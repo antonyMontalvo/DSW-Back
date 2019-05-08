@@ -1,11 +1,12 @@
 module.exports = {
     HOST: 'localhost:5000',
     db: {
-        host: '',
+        host: 'localhost',
         port: '27017',
-        database: 'DB',
+        database: 'DSWDB',
         user: '',
         password: '',
+        dialect: 'mongodb'
     },
     tokens: {
         USER_KEY: ''
