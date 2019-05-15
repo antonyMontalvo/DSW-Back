@@ -1,22 +1,25 @@
 const morgan = require('morgan'),
   cors = require('cors'),
+  path = require('path'),
   express = require('express'),
-  app = express(),
-  // ioServerr = require('./server/index')(app),
-  { server } = require('./config/infoConfig'),
-  PORT = (process.env.PORT || server.port);
+  app = express();
 
-require('./config/database');
+const { server } = require('./config/infoConfig'),
+  PORT = (process.env.PORT || server.port),
+  indexRouter = require('./routes/index');
+
 /*
-  Settings
+Settings
 */
+require('./config/database');
 app.set("port", PORT);
-
+app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'ejs');
 
 /*
   Static files
 */
-
+app.use('/public/user', express.static(__dirname + '/public/images/user'));
 
 /*
   Middlewares
@@ -36,6 +39,7 @@ app.use((req, res, next) => {
 /*
   Routes
 */
+indexRouter.userRoutes(app);
 
 /*
   Server start
@@ -44,8 +48,3 @@ app.listen(PORT, () => {
   console.log(`Server runing on: http://localhost:${PORT}`);
   console.log(`Socket server running`);
 });
-
-// ioServer.listen(PORT, () => {
-//   console.log(`Server runing on: http://localhost:${PORT}`);
-//   console.log(`Socket server running`);
-// });
