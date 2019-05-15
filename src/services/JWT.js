@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken"),
-  { tokens } = require("../config/config");
+  { tokens } = require("../config/infoConfig");
 
 const JWT = {};
 

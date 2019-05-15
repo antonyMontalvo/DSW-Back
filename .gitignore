@@ -2,8 +2,8 @@
 node_modules/
 
 #principal configuration
-src/config.js
-src/info.json
+src/config/infoConfig.js
+src/config/infoTokenCreation.json
 
 #public images
 src/public/

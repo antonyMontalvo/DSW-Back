@@ -1,7 +1,7 @@
 const mongoose = require("mongoose"),
-    config = require("./config");
+    { db } = require("./infoConfig");
 
-const URI = `${config.db.dialect}://${config.db.host}:${config.db.port}/${config.db.database}`;
+const URI = `${db.dialect}://${db.host}:${db.port}/${db.database}`;
 
 mongoose
     .connect(URI, { useNewUrlParser: true })
@@ -9,8 +9,3 @@ mongoose
     .catch(err => console.error(err));
 
 module.exports = mongoose;
-// {
-//     "name": "Antony Abel",
-//     "password": 987654321,
-//     "credential": "admin"
-//   }

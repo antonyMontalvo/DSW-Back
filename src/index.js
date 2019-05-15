@@ -3,7 +3,7 @@ const morgan = require('morgan'),
   express = require('express'),
   app = express(),
   // ioServerr = require('./server/index')(app),
-  { server } = require('./config/config'),
+  { server } = require('./config/infoConfig'),
   PORT = (process.env.PORT || server.port);
 
 require('./config/database');

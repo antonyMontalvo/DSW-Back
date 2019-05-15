@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken"),
-    config = require("../config/config");
+    { tokens } = require("../config/infoConfig");
 
 const Authentication = {};
 
@@ -14,7 +14,7 @@ Authentication.isAuth = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
 
     if (token) {
-        jwt.verify(token, config.tokens.USER_KEY, (err, decoded) => {
+        jwt.verify(token, tokens.USER_KEY, (err, decoded) => {
             if (err) {
                 return res.status(403).json({
                     succes: false,
