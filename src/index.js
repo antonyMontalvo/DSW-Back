@@ -2,9 +2,11 @@ const morgan = require('morgan'),
   cors = require('cors'),
   express = require('express'),
   app = express(),
-  // ioServer = require('./server/index')(app),
-  PORT = (process.env.PORT || 5000);
+  // ioServerr = require('./server/index')(app),
+  { server } = require('./config/config'),
+  PORT = (process.env.PORT || server.port);
 
+require('./config/database');
 /*
   Settings
 */
@@ -21,7 +23,7 @@ app.set("port", PORT);
 */
 app.use(cors());
 app.use(morgan("dev"));
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 /*
