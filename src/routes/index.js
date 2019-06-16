@@ -1,3 +1,4 @@
+const { url } = require('../config/infoConfig');
 
 const User = {
     userRouter: require('./user/userRouter'),
@@ -5,8 +6,8 @@ const User = {
 
 const indexRouter = {}
 
-indexRouter.userRoutes = (app) => {
-    app.use(User.userRouter)
+indexRouter.userRouter = (app) => {
+    app.use(url.urlV1, User.userRouter)
 }
 
 module.exports = indexRouter;

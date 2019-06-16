@@ -1,7 +1,7 @@
 module.exports = {
     server: {
         host: '',
-        port: '5009'
+        port: '5000'
     },
     db: {
         host: 'localhost',
@@ -24,7 +24,7 @@ module.exports = {
     },
     image:{
         user: {
-            path: __dirname + '/public/images/user',
+            path: __dirname + '/public/files/user',
             publicUrl: '/public/user'
         }
     }

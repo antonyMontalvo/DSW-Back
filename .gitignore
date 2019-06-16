@@ -3,7 +3,7 @@ node_modules/
 
 #principal configuration
 src/config/infoConfig.js
-src/config/infoTokenCreation.json
+tokeninformation.json
 
 #public images
 src/public/
