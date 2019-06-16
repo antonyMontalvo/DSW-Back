@@ -21,8 +21,8 @@ Router
     .get('/' , (req, res) => {
         res.sendFile(path.join(__dirname + '/../../views/home.html'));
     })
-    .post('/upload', UploadFile.userPhoto , (req, res) => {
-		res.send('Upload')
-	});
+    .get('/upload', UserController.getProfilePicture)
+    .post('/upload', UploadFile.userPhoto , UserController.updateProfilePicture)
+    
 
 module.exports = Router;

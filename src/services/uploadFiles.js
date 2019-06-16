@@ -20,7 +20,7 @@ const fileFilter = (req, file, cb) => {
 // Perfil Image
 const storageUser = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, process.env.FILE_PATH)
+        cb(null, process.env.FILE_PATH_LOCAL)
     },
     filename: function (req, file, cb) {
         cb(null, uuid() + path.extname(file.originalname))
@@ -30,7 +30,6 @@ const storageUser = multer.diskStorage({
 UploadFile.userPhoto = (req, res, next) => {
     const uploadUserPhoto = multer({
         storage: storageUser,
-        dest: process.env.FILE_PATH,
         limits: {
             fileSize: fileSize
         },
@@ -39,14 +38,14 @@ UploadFile.userPhoto = (req, res, next) => {
 
     uploadUserPhoto(req, res, (error) => {
         if (error) return res.status(422).json({ error: 'Invalid file' })
-        next()
+        next();
     })
 }
 
 // Proyect Images
 const storageProyect = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, process.env.FILE_PATH)
+        cb(null, process.env.FILE_PATH_LOCAL)
     },
     filename: function (req, file, cb) {
         cb(null, uuid() + path.extname(file.originalname))
@@ -56,7 +55,6 @@ const storageProyect = multer.diskStorage({
 UploadFile.proyectPhotos = (req, res, next) => {
     const uploadProyectPhotos = multer({
         storage: storageProyect,
-        dest: process.env.FILE_PATH,
         limits: {
             fileSize: fileSize
         },
@@ -65,7 +63,7 @@ UploadFile.proyectPhotos = (req, res, next) => {
 
     uploadProyectPhotos(req, res, (error) => {
         if (error) return res.status(422).json({ error: 'Invalid file' })
-        next()
+        next();
     })
 }
 
