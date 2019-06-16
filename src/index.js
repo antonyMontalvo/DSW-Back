@@ -29,15 +29,6 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use(multer({
-  storage: multer.diskStorage({
-      destination: path.join(__dirname, 'public/files'),
-      filename: (req, file, cb) => {
-          cb(null, file.originalname)
-      }
-  }),
-  dest: path.join(__dirname, 'public/files')
-}).single('file'));
 
 /*
   Global variables

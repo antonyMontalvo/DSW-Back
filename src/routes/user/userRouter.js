@@ -4,24 +4,24 @@ const express = require('express'),
     path = require('path');
 
 const authentication = require('../../middlewares/authentication')
-    UserController = require('../../controllers/userController');
+    UserController = require('../../controllers/userController')
+    UploadFile = require('../../services/uploadFiles');
 
 Router
-    // .post('/signin',  [
-    //     check('userEmail').exists().isString().isEmail(),
-    //     check('userPassword').exists().isString()
-    // ], UserController);
+    .post('/signin',  [
+        check('userEmail').exists().isString().isEmail(),
+        check('userPassword').exists().isString()
+    ], UserController.signin);
 
 /*
     Authentication
 */
 
 Router
-    .get('/', authentication.isAuth , (req, res) => {
+    .get('/' , (req, res) => {
         res.sendFile(path.join(__dirname + '/../../views/home.html'));
-        // res.status(200).json({mes:'index'});
     })
-    .post('/upload', (req, res) => {
+    .post('/upload', UploadFile.userPhoto , (req, res) => {
 		res.send('Upload')
 	});
 
