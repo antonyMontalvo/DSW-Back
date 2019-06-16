@@ -1,5 +1,3 @@
-const { url } = require('../config/infoConfig');
-
 const User = {
     userRouter: require('./user/userRouter'),
 }
@@ -7,7 +5,7 @@ const User = {
 const indexRouter = {}
 
 indexRouter.userRouter = (app) => {
-    app.use(url.urlV1, User.userRouter)
+    app.use(process.env.PROYECT_URL, User.userRouter)
 }
 
 module.exports = indexRouter;

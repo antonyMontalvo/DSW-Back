@@ -5,13 +5,15 @@ const morgan = require('morgan'),
   multer = require('multer'),
   app = express();
 
-const { server } = require('./config/infoConfig'),
-  PORT = (process.env.PORT || server.port),
+const PORT = (process.env.PORT || 5000),
   indexRouter = require('./routes/index');
 
 /*
 Settings
 */
+if(process.env.NODE_ENV !== 'production'){
+  require('dotenv').config(); // variables de entorno
+}
 require('./config/database'); // mongoDB
 app.set('port', PORT);
 app.set('views', path.join(__dirname, 'views'));
@@ -53,5 +55,5 @@ indexRouter.userRouter(app);
   Server start
 */
 app.listen(app.get('port'), () => {
-  console.log(`Server runing on: http://${server.host}:${app.get('port')}`);
+  console.log(`Server runing on: http://localhost:${app.get('port')}`);
 });

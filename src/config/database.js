@@ -1,7 +1,7 @@
 const mongoose = require("mongoose"),
     { db } = require("./infoConfig");
 
-const URI = `${db.dialect}://${db.host}:${db.port}/${db.database}`;
+const URI = process.env.MONGODB_URI;
 
 mongoose
     .connect(URI, { useNewUrlParser: true })

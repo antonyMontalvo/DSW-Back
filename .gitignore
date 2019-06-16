@@ -4,6 +4,7 @@ node_modules/
 #principal configuration
 src/config/infoConfig.js
 tokeninformation.json
+.env
 
 #public images
 src/public/

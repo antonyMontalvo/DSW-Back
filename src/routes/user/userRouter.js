@@ -1,16 +1,16 @@
 const express = require('express'),
     Router = express.Router(),
-    { check } = require('express-validator'),
+    { check } = require('express-validator/check'),
     path = require('path');
 
 const authentication = require('../../middlewares/authentication')
     UserController = require('../../controllers/userController');
 
 Router
-    .post('/signin',  [
-        check('userEmail').exists().isString().isEmail(),
-        check('userPassword').exists().isString()
-    ], UserController);
+    // .post('/signin',  [
+    //     check('userEmail').exists().isString().isEmail(),
+    //     check('userPassword').exists().isString()
+    // ], UserController);
 
 /*
     Authentication
