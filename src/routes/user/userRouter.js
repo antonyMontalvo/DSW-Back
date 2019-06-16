@@ -3,8 +3,21 @@ const express = require('express'),
     { check } = require('express-validator'),
     path = require('path');
 
+const authentication = require('../../middlewares/authentication')
+    UserController = require('../../controllers/userController');
+
 Router
-    .get('/', (req, res) => {
+    .post('/signin',  [
+        check('userEmail').exists().isString().isEmail(),
+        check('userPassword').exists().isString()
+    ], UserController);
+
+/*
+    Authentication
+*/
+
+Router
+    .get('/', authentication.isAuth , (req, res) => {
         res.sendFile(path.join(__dirname + '/../../views/home.html'));
         // res.status(200).json({mes:'index'});
     })

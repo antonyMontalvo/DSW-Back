@@ -35,7 +35,7 @@ app.use(multer({
       }
   }),
   dest: path.join(__dirname, 'public/files')
-}).single('fileimage'));
+}).single('file'));
 
 /*
   Global variables

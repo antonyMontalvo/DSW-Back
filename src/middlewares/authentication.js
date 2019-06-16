@@ -27,3 +27,5 @@ Authentication.isAuth = (req, res, next) => {
         })
     }
 }
+
+module.exports = Authentication;
