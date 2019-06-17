@@ -1,11 +1,10 @@
-const jwt = require("jsonwebtoken"),
-  { tokens } = require("../config/infoConfig");
+const jwt = require("jsonwebtoken");
 
 const JWT = {};
 
 JWT.createToken = (user) => {
   const payload = user;
-  return jwt.sign(payload, tokens.USER_KEY);
+  return jwt.sign(payload, process.env.USER_KEY);
 }
 
 JWT.getPayload = (bearerToken) => {

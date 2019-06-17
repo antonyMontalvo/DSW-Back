@@ -2,16 +2,15 @@ const morgan = require('morgan'),
   cors = require('cors'),
   path = require('path'),
   express = require('express'),
-  multer = require('multer'),
   app = express();
 
-const PORT = (process.env.PORT || 5000),
+const PORT = (process.env.PROYECT_PORT || 5000),
   indexRouter = require('./routes/index');
 
 /*
 Settings
 */
-if(process.env.NODE_ENV !== 'production'){
+if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config(); // variables de entorno
 }
 require('./config/database'); // mongoDB
@@ -22,6 +21,7 @@ app.set('views', path.join(__dirname, 'views'));
   Static files
 */
 app.use(express.static(path.join(__dirname + '/public')));
+
 /*
   Middlewares
 */
