@@ -33,7 +33,13 @@ Router
     .get('/upload', UserController.getProfilePicture)
 
     // POST
-    .post('/proyects', authentication.isAuth, UserController.createProyect)
+    .post('/proyects', authentication.isAuth, [
+        check('').exists().isString(),
+        check('').exists().isString(),
+        check('').exists().isString(),
+        check('').exists().isString(),
+        check('').exists().isString()
+    ], UserController.createProyect)
     .post('/upload', UploadFile.userPhoto, UserController.updateProfilePicture)
 
 

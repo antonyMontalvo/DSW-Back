@@ -10,6 +10,7 @@ const ProyectSchema = new Schema({
     end_date: { type: String, required: true },
     reward: { // Recompensas
         type: [{
+            _id: { type: Schema.Types.ObjectId, required: false },
             title: { type: String, required: true },
             description: { type: String, required: false, default: '' },
             min_amount: { type: Number, required: true, default: 0 },
@@ -17,10 +18,29 @@ const ProyectSchema = new Schema({
         }], required: false
     },
     challenges: { type: String, required: true },
-    long_desc: { type: String, required: true },
-    collaborators: { type: String, required: true },
-    pay_verification: { type: String, required: true },
-    patrocinator: { type: String, required: true },
+    long_desc: { // Descripciones
+        type: [{
+            _id: { type: Schema.Types.ObjectId, required: false },
+            title: { type: String, required: true },
+            description: { type: String, required: true },
+        }], required: false
+    },
+    collaborators: { type: [Schema.Types.objectId], required: false },
+    pay_verification: { // Metodo de pago
+        type: {
+            _id: { type: Schema.Types.ObjectId, required: false },
+            identification_card: { type: String, required: true },
+            credit_card: { type: String, required: true, maxLength: 12 },
+            owner_name: { type: String, required: true },
+        }, required: false
+    },
+    sponsors: { // Colaboradores
+        type: [{
+            _id: { type: Schema.Types.ObjectId, required: false },
+            id_sponsor: { type: Schema.Types.ObjectId, required: true },
+            amount: { type: String, required: true }
+        }], required: false
+    },
 });
 
 

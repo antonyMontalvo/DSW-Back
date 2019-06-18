@@ -130,8 +130,8 @@ UserController.getRankedProyects = async (req, res) => {
     const proyects = await Proyect.find();
     console.log(proyects)
     return proyects
-    ? res.status(200).json({ message: proyects })
-    : res.status(202).json({ message: '' });
+      ? res.status(200).json({ message: proyects })
+      : res.status(202).json({ message: '' });
 
   } catch (error) {
     return res.status(500).json({ errors: error.stack });
@@ -149,7 +149,7 @@ UserController.getProfilePicture = async (req, res) => {
 
     return res.status(200).json({ message: result })
   } catch (error) {
-    return res.status(500).json({ errors: error });
+    return res.status(500).json({ errors: error.stack });
   }
 }
 
@@ -159,7 +159,19 @@ UserController.getProfilePicture = async (req, res) => {
   Creat proyect method
 */
 UserController.createProyect = async (req, res) => {
-  
+  let data = {}, errors = validationResult(req);
+  try {
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ error: errors.array() });
+    }
+
+    const proyect = new Proyect({
+    }), resultProyect = await proyect.save(); //guardando proyecto
+
+    console.log(resultProyect)
+  } catch (error) {
+    return res.status(500).json({ errors: error.stack });
+  }
 }
 
 /* 
@@ -188,7 +200,7 @@ UserController.updateProfilePicture = async (req, res) => {
 
     return res.status(200).json({ message: 'upload' })
   } catch (error) {
-    return res.status(500).json({ error: error });
+    return res.status(500).json({ error: error.stack });
   }
 }
 
