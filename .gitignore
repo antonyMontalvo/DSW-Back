@@ -2,8 +2,7 @@
 node_modules/
 
 #principal configuration
-src/config/infoConfig.js
-tokeninformation.json
+src/config/tokeninformation.json
 .env
 
 #public images
