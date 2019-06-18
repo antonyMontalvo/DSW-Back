@@ -1,5 +1,5 @@
 const User = {
-    userRouter: require('./user/userRouter'),
+    userRouter: require('./userRouter'),
 }
 
 const indexRouter = {}

@@ -3,9 +3,9 @@ const express = require('express'),
     { check } = require('express-validator/check'),
     path = require('path');
 
-const authentication = require('../../middlewares/authentication')
-UserController = require('../../controllers/userController')
-UploadFile = require('../../services/uploadFiles');
+const authentication = require('../middlewares/authentication')
+UserController = require('../controllers/userController')
+UploadFile = require('../services/uploadFiles');
 
 Router
     .post('/signup', [
@@ -25,8 +25,9 @@ Router
 */
 
 Router
+    // .get('/proyects/all', authentication.isAuth, UserController.)
     .get('/', authentication.isAuth, (req, res) => {
-        res.sendFile(path.join(__dirname + '/../../views/home.html'));
+        res.sendFile(path.join(__dirname + '/../views/home.html'));
     })
     .get('/upload', authentication.isAuth, UserController.getProfilePicture)
     // .post('/upload', UploadFile.userPhoto, UserController.updateProfilePicture)

@@ -42,7 +42,7 @@ UserController.signup = async (req, res) => {
         username: resultPerson.first_name,
         password: data.userPassword,
         person: resultPerson._id,
-        email: data.userEmail
+        email: data.userEmail,
       }), resultUser = await user.save(); //guardando usuario
 
       let objectResult = {
@@ -51,7 +51,8 @@ UserController.signup = async (req, res) => {
         userFirstName: resultPerson.first_name,
         userLastName: resultPerson.lastname_1,
         userSurName: resultPerson.lastname_2,
-        userPhone: resultPerson.phone
+        userPhone: resultPerson.phone,
+        userPhoto: resultUser.image
       };
 
       return res.status(200).json({
@@ -93,7 +94,8 @@ UserController.signin = async (req, res) => {
             userFirstName: personExists.first_name,
             userLastName: personExists.lastname_1,
             userSurName: personExists.lastname_2,
-            userPhone: personExists.phone
+            userPhone: personExists.phone,
+            userPhoto: userExists.image
           };
 
         return response == true
@@ -118,7 +120,7 @@ UserController.signin = async (req, res) => {
 /* 
   Update only profile picture
 */
-/* UserController.updateProfilePicture = async (req, res) => {
+UserController.updateProfilePicture = async (req, res) => {
   const cloudinary = require('cloudinary').v2;
 
   cloudinary.config({
@@ -130,6 +132,7 @@ UserController.signin = async (req, res) => {
   try {
     const result = await cloudinary.uploader.upload(req.file.path);
 
+    // Falta cambiar que se integre en el mismo usuario
     let newPhoto = new Photo({
       imageURL: result.url,
       imageId: result.public_id
@@ -142,7 +145,7 @@ UserController.signin = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: error });
   }
-} */
+}
 
 /* 
   Get only profile picture
