@@ -25,12 +25,16 @@ Router
 */
 
 Router
-    // .get('/proyects/all', authentication.isAuth, UserController.)
+    // GET
+    .get('/proyects/all', authentication.isAuth, UserController.getRankedProyects)
     .get('/', authentication.isAuth, (req, res) => {
         res.sendFile(path.join(__dirname + '/../views/home.html'));
     })
-    .get('/upload', authentication.isAuth, UserController.getProfilePicture)
-    // .post('/upload', UploadFile.userPhoto, UserController.updateProfilePicture)
+    .get('/upload', UserController.getProfilePicture)
+
+    // POST
+    .post('/proyects', authentication.isAuth, UserController.createProyect)
+    .post('/upload', UploadFile.userPhoto, UserController.updateProfilePicture)
 
 
 module.exports = Router;

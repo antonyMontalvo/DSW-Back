@@ -5,9 +5,11 @@ const bcrypt = require("bcryptjs"),
 const jwt = require('../services/JWT'),
   User = require('../models/User'),
   Person = require('../models/Person'),
+  Proyect = require('../models/Proyect'),
+  Photo = require('../models/Photo'), // Momentaneo
   UserController = {};
 
-///////////////// FUNCTIONS
+//////////////////////////////// Not Authenticate controllers
 
 /* 
   Register user
@@ -109,12 +111,55 @@ UserController.signin = async (req, res) => {
           })
           : res.status(202).json({ message: 'Email or password wrong' });
       })
-
       : res.status(202).json({ message: 'Email or password wrong' });
 
   } catch (error) {
     return res.status(500).json({ errors: error.stack });
   }
+}
+
+//////////////////////////////// Authenticate controllers
+
+//////////////////////////////// GET
+
+/* 
+  Get all proyects more ranked
+*/
+UserController.getRankedProyects = async (req, res) => {
+  try {
+    const proyects = await Proyect.find();
+    console.log(proyects)
+    return proyects
+    ? res.status(200).json({ message: proyects })
+    : res.status(202).json({ message: '' });
+
+  } catch (error) {
+    return res.status(500).json({ errors: error.stack });
+  }
+}
+
+/* 
+  Get only profile picture
+*/
+UserController.getProfilePicture = async (req, res) => {
+  try {
+    let { _idUser } = jwt.getPayload(req.headers.authorization);
+
+    // const result = await Photo.find();
+
+    return res.status(200).json({ message: result })
+  } catch (error) {
+    return res.status(500).json({ errors: error });
+  }
+}
+
+//////////////////////////////// POST
+
+/* 
+  Creat proyect method
+*/
+UserController.createProyect = async (req, res) => {
+  
 }
 
 /* 
@@ -144,21 +189,6 @@ UserController.updateProfilePicture = async (req, res) => {
     return res.status(200).json({ message: 'upload' })
   } catch (error) {
     return res.status(500).json({ error: error });
-  }
-}
-
-/* 
-  Get only profile picture
-*/
-UserController.getProfilePicture = async (req, res) => {
-  try {
-    let { _idUser } = jwt.getPayload(req.headers.authorization);
-
-    // const result = await Photo.find();
-
-    return res.status(200).json({ message: result })
-  } catch (error) {
-    return res.status(500).json({ errors: error });
   }
 }
 
