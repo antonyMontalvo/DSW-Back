@@ -159,16 +159,18 @@ UserController.getProfilePicture = async (req, res) => {
   Creat proyect method
 */
 UserController.createProyect = async (req, res) => {
-  let data = {}, errors = validationResult(req);
+  let data = {
+    
+  }, errors = validationResult(req);
   try {
     if (!errors.isEmpty()) {
       return res.status(422).json({ error: errors.array() });
     }
 
-    const proyect = new Proyect({
-    }), resultProyect = await proyect.save(); //guardando proyecto
+    // const proyect = new Proyect({
+    // }), resultProyect = await proyect.save(); //guardando proyecto
 
-    console.log(resultProyect)
+    return res.status(200).json({ message: req.body });
   } catch (error) {
     return res.status(500).json({ errors: error.stack });
   }

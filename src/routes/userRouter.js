@@ -34,11 +34,14 @@ Router
 
     // POST
     .post('/proyects', authentication.isAuth, [
-        check('').exists().isString(),
-        check('').exists().isString(),
-        check('').exists().isString(),
-        check('').exists().isString(),
-        check('').exists().isString()
+        // check('title').exists().isString(),
+        // check('shortDescription').exists().isString(),
+        // check('category').exists().isString(),
+        // check('ubication').exists().isString(),
+        // check('monetaryGoal').exists().isString(),
+        // check('startDate').exists().isISO8601(),
+        // check('monetaryGoal').exists().isISO8601(),
+        // check('challenges').exists().isISO8601(),
     ], UserController.createProyect)
     .post('/upload', UploadFile.userPhoto, UserController.updateProfilePicture)
 

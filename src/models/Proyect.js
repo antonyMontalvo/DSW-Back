@@ -5,9 +5,9 @@ const ProyectSchema = new Schema({
     short_desc: { type: String, required: true },
     category: { type: String, required: true },
     ubication: { type: String, required: true },
-    monetary_goal: { type: String, required: true },
-    start_date: { type: String, required: true },
-    end_date: { type: String, required: true },
+    monetary_goal: { type: Number, required: true },
+    start_date: { type: Date, required: true },
+    end_date: { type: Date, required: true },
     reward: { // Recompensas
         type: [{
             _id: { type: Schema.Types.ObjectId, required: false },
