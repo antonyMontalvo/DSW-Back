@@ -27,7 +27,7 @@ Router
 Router
     // GET
     .get('/proyects/all', authentication.isAuth, UserController.getRankedProyects)
-    .get('/', authentication.isAuth, (req, res) => {
+    .get('/', (req, res) => {
         res.sendFile(path.join(__dirname + '/../views/home.html'));
     })
     .get('/upload', UserController.getProfilePicture)
