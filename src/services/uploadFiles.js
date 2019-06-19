@@ -38,8 +38,12 @@ UploadFile.userPhoto = (req, res, next) => {
 
     console.log(req.file)
     uploadUserPhoto(req, res, (error) => {
-        if (error) return res.status(422).json({ error: 'Invalid file' })
-        next();
+        if (typeof req.file !== 'undefined') {
+            if(error) return res.status(422).json({ error: 'Invalid file' })
+            next()
+        } else {
+            return res.status(422).json({ error: req.fileValidationError })
+        }
     })
 }
 

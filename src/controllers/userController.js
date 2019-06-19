@@ -54,15 +54,15 @@ UserController.signup = async (req, res) => {
         userLastName: resultPerson.lastname_1,
         userSurName: resultPerson.lastname_2,
         userPhone: resultPerson.phone,
-        userPhoto: resultUser.image
-      };
-
-      return res.status(200).json({
+        userPhoto: resultUser.image,
         token: jwt.createToken({
           username: resultUser.username,
           password: resultUser.password,
           person: resultUser.person
         }),
+      };
+
+      return res.status(200).json({
         message: objectResult
       });
     }
@@ -97,16 +97,16 @@ UserController.signin = async (req, res) => {
             userLastName: personExists.lastname_1,
             userSurName: personExists.lastname_2,
             userPhone: personExists.phone,
-            userPhoto: userExists.image
-          };
-
-        return response == true
-          ? res.status(200).json({
+            userPhoto: userExists.image,
             token: jwt.createToken({
               username: userExists.username,
               password: userExists.password,
               person: userExists.person
             }),
+          };
+
+        return response == true
+          ? res.status(200).json({
             message: objectResult
           })
           : res.status(202).json({ message: 'Email or password wrong' });
