@@ -12,7 +12,7 @@ const fileFilter = (req, file, cb) => {
     } else if(file.mimetype === 'application/pdf'){
         cb(null, true)
     } else {
-        req.fileValidationError = 'The image does not have a valid extension';
+        req.fileValidationError = 'The image not have a valid extension';
         return cb(null, false, new Error())
     }
 }
@@ -36,8 +36,8 @@ UploadFile.userPhoto = (req, res, next) => {
         fileFilter: fileFilter
     }).single('userPhoto')
 
+    console.log(req.file)
     uploadUserPhoto(req, res, (error) => {
-        console.log(req)
         if (error) return res.status(422).json({ error: 'Invalid file' })
         next();
     })
