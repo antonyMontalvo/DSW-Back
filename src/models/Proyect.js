@@ -1,5 +1,10 @@
 const { Schema, model } = require('mongoose');
 
+const Payment = require('./ProyectPayment');
+const Reward = require('./ProyectReward');
+const LongDescription = require('./ProyectLongDescription');
+const Sponsor = require('./ProyectSponsor');
+
 const ProyectSchema = new Schema({
     title: { type: String, required: true },
     short_desc: { type: String, required: true },
@@ -8,38 +13,20 @@ const ProyectSchema = new Schema({
     monetary_goal: { type: Number, required: true },
     start_date: { type: Date, required: true },
     end_date: { type: Date, required: true },
-    reward: { // Recompensas
-        type: [{
-            _id: { type: Schema.Types.ObjectId, required: false },
-            title: { type: String, required: true },
-            description: { type: String, required: false, default: '' },
-            min_amount: { type: Number, required: true, default: 0 },
-            estimated_time: { type: String, required: true },
-        }], required: false
-    },
     challenges: { type: String, required: true },
-    long_desc: { // Descripciones
-        type: [{
-            _id: { type: Schema.Types.ObjectId, required: false },
-            title: { type: String, required: true },
-            description: { type: String, required: true },
-        }], required: false
-    },
+    link_video: { type: String, required: false, default: '' },
     collaborators: { type: [Schema.Types.objectId], required: false },
+    reward: { // Recompensas
+        type: [Reward], required: false
+    },
+    long_desc: { // Descripciones
+        type: [LongDescription], required: false
+    },
     pay_verification: { // Metodo de pago
-        type: {
-            _id: { type: Schema.Types.ObjectId, required: false },
-            identification_card: { type: String, required: true },
-            credit_card: { type: String, required: true, maxLength: 12 },
-            owner_name: { type: String, required: true },
-        }, required: false
+        type: Payment, required: false
     },
     sponsors: { // Colaboradores
-        type: [{
-            _id: { type: Schema.Types.ObjectId, required: false },
-            id_sponsor: { type: Schema.Types.ObjectId, required: true },
-            amount: { type: String, required: true }
-        }], required: false
+        type: [Sponsor], required: false
     },
 });
 

@@ -160,17 +160,97 @@ UserController.getProfilePicture = async (req, res) => {
 */
 UserController.createProyect = async (req, res) => {
   let data = {
-    
+    title: req.body.title,
+    shortDescription: req.body.shortDescription,
+    category: req.body.category,
+    ubication: req.body.ubication,
+    monetaryGoal: req.body.monetaryGoal,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
+    challenges: req.body.challenges,
   }, errors = validationResult(req);
+
   try {
     if (!errors.isEmpty()) {
       return res.status(422).json({ error: errors.array() });
     }
 
-    // const proyect = new Proyect({
-    // }), resultProyect = await proyect.save(); //guardando proyecto
+    const proyect = new Proyect({
+      title: data.title,
+      short_desc: data.shortDescription,
+      category: data.category,
+      ubication: data.ubication,
+      monetary_goal: data.monetaryGoal,
+      start_date: data.startDate,
+      end_date: data.endDate,
+      challenges: data.challenges,
+    }), resultProyect = await proyect.save(); //guardando proyecto
 
-    return res.status(200).json({ message: req.body });
+    return res.status(200).json({ message: resultProyect });
+  } catch (error) {
+    return res.status(500).json({ errors: error.stack });
+  }
+}
+
+/* 
+  Update proyect
+*/
+UserController.updateProyect = async (req, res) => {
+  let data = {
+    idProyect: req.body.idProyect,
+    title: req.body.title,
+    shortDescription: req.body.shortDescription,
+    category: req.body.category,
+    ubication: req.body.ubication,
+    monetaryGoal: req.body.monetaryGoal,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
+    challenges: req.body.challenges,
+  }, errors = validationResult(req);
+
+  try {
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ error: errors.array() });
+    }
+
+    const proyectExists = await Proyect.find({_id: data.idProyect});
+    console.log(proyectExists)
+    if(proyectExists){
+      const proyect = new Proyect({
+        short_desc: data.shortDescription,
+        category: data.category,
+        ubication: data.ubication,
+        monetary_goal: data.monetaryGoal,
+        start_date: data.startDate,
+        end_date: data.endDate,
+        challenges: data.challenges,
+      });
+
+      console.log(req.body.collaborators)
+      if(req.body.collaborators){
+        proyect.collaborators = req.body.collaborators
+      }
+
+      // if(req.body.rewards){
+      //   proyect
+      // }
+      // if(req.body.longDescriptions){
+        
+      // }
+      // if(req.body.payment){
+        
+      // }
+
+      // if(req.body.sponsors){
+
+      // }
+
+      const proyectUpdated = Proyect.findByIdAndUpdate(data.idProyect, proyect);
+      console.log(proyectUpdated);
+      return res.status(200).json({ message: proyectUpdated });
+    }else {
+      return res.status(202).json({ message: 'Noy exists this proyect' });
+    }
   } catch (error) {
     return res.status(500).json({ errors: error.stack });
   }

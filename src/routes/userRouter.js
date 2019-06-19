@@ -34,16 +34,29 @@ Router
 
     // POST
     .post('/proyects', authentication.isAuth, [
-        // check('title').exists().isString(),
-        // check('shortDescription').exists().isString(),
-        // check('category').exists().isString(),
-        // check('ubication').exists().isString(),
-        // check('monetaryGoal').exists().isString(),
-        // check('startDate').exists().isISO8601(),
-        // check('monetaryGoal').exists().isISO8601(),
-        // check('challenges').exists().isISO8601(),
+        check('title').exists().isString().isLength({min: 1}),
+        check('shortDescription').exists().isString().isLength({min: 1}),
+        check('category').exists().isString().isLength({min: 1}),
+        check('ubication').exists().isString().isLength({min: 1}),
+        check('monetaryGoal').exists().isNumeric(),
+        check('startDate').exists().isISO8601(),
+        check('endDate').exists().isISO8601(),
+        check('challenges').exists().isString().isLength({min: 1}),
     ], UserController.createProyect)
     .post('/upload', UploadFile.userPhoto, UserController.updateProfilePicture)
+
+    // PUT
+    .put('/proyects', authentication.isAuth, [
+        check('idProyect').exists().isMongoId(),
+        check('title').exists().isString().isLength({min: 1}),
+        check('shortDescription').exists().isString().isLength({min: 1}),
+        check('category').exists().isString().isLength({min: 1}),
+        check('ubication').exists().isString().isLength({min: 1}),
+        check('monetaryGoal').exists().isNumeric(),
+        check('startDate').exists().isISO8601(),
+        check('endDate').exists().isISO8601(),
+        check('challenges').exists().isString().isLength({min: 1}),
+    ], UserController.updateProyect)
 
 
 module.exports = Router;
