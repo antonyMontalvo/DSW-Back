@@ -33,8 +33,10 @@ UserController.signup = async (req, res) => {
     let userExists = await User.findOne({ email: data.userEmail });
     if (userExists) {
       return res.status(202).json({
-        message: 'Email exists',
-        status: 202
+        message: {
+          message: 'Email exists',
+          status: 202
+        }
       });
     } else {
       const person = new Person({
@@ -64,17 +66,19 @@ UserController.signup = async (req, res) => {
           password: resultUser.password,
           person: resultUser.person
         }),
+        status: 200
       };
 
       return res.status(200).json({
-        message: objectResult,
-        status: 200
+        message: {
+          message: objectResult,
+          status: 200
+        }
       });
     }
   } catch (error) {
     return res.status(500).json({
       errors: error.stack,
-      status: 500
     });
   }
 }

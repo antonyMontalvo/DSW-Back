@@ -28,6 +28,7 @@ const storageUser = multer.diskStorage({
 UploadFile.userPhoto = (req, res, next) => {
     const uploadUserPhoto = multer({
         storage: storageUser,
+        dest: process.env.FILE_PATH_LOCAL,
         limits: {
             fileSize: fileSize
         },
