@@ -6,7 +6,6 @@ const jwt = require('../services/JWT'),
   User = require('../models/User'),
   Person = require('../models/Person'),
   Proyect = require('../models/Proyect'),
-  Photo = require('../models/Photo'), // Momentaneo
   UserController = {};
 
 //////////////////////////////// Not Authenticate controllers
@@ -25,13 +24,17 @@ UserController.signup = async (req, res) => {
 
   try {
     if (!errors.isEmpty()) {
-      return res.status(422).json({ error: errors.array() });
+      return res.status(422).json({
+        error: errors.array(),
+        status: 422
+      });
     }
 
     let userExists = await User.findOne({ email: data.userEmail });
     if (userExists) {
       return res.status(202).json({
-        message: 'Email exists'
+        message: 'Email exists',
+        status: 202
       });
     } else {
       const person = new Person({
@@ -56,6 +59,7 @@ UserController.signup = async (req, res) => {
         userPhone: resultPerson.phone,
         userPhoto: resultUser.image,
         token: jwt.createToken({
+          idUser: resultUser._id,
           username: resultUser.username,
           password: resultUser.password,
           person: resultUser.person
@@ -63,11 +67,15 @@ UserController.signup = async (req, res) => {
       };
 
       return res.status(200).json({
-        message: objectResult
+        message: objectResult,
+        status: 200
       });
     }
   } catch (error) {
-    return res.status(500).json({ errors: error.stack });
+    return res.status(500).json({
+      errors: error.stack,
+      status: 500
+    });
   }
 }
 
@@ -81,7 +89,10 @@ UserController.signin = async (req, res) => {
   }, errors = validationResult(req);
 
   try {
-    if (!errors.isEmpty()) return res.status(422).json({ error: errors.array() });
+    if (!errors.isEmpty()) return res.status(422).json({
+      error: errors.array(),
+      status: 422
+    });
 
     let userExists = await User.findOne({ email: data.userEmail });
 
@@ -99,6 +110,7 @@ UserController.signin = async (req, res) => {
             userPhone: personExists.phone,
             userPhoto: userExists.image,
             token: jwt.createToken({
+              idUser: userExists._id,
               username: userExists.username,
               password: userExists.password,
               person: userExists.person
@@ -107,14 +119,15 @@ UserController.signin = async (req, res) => {
 
         return response == true
           ? res.status(200).json({
-            message: objectResult
+            message: objectResult,
+            status: 200
           })
-          : res.status(202).json({ message: 'Email or password wrong' });
+          : res.status(202).json({ message: 'Email or password wrong', status: 202 });
       })
-      : res.status(202).json({ message: 'Email or password wrong' });
+      : res.status(202).json({ message: 'Email or password wrong', status: 202 });
 
   } catch (error) {
-    return res.status(500).json({ errors: error.stack });
+    return res.status(500).json({ errors: error.stack, status: 500 });
   }
 }
 
@@ -130,11 +143,11 @@ UserController.getRankedProyects = async (req, res) => {
     const proyects = await Proyect.find();
     console.log(proyects)
     return proyects
-      ? res.status(200).json({ message: proyects })
-      : res.status(202).json({ message: '' });
+      ? res.status(200).json({ message: proyects, status: 200 })
+      : res.status(202).json({ message: '', status: 202 });
 
   } catch (error) {
-    return res.status(500).json({ errors: error.stack });
+    return res.status(500).json({ errors: error.stack, status: 500 });
   }
 }
 
@@ -143,13 +156,13 @@ UserController.getRankedProyects = async (req, res) => {
 */
 UserController.getProfilePicture = async (req, res) => {
   try {
-    let { _idUser } = jwt.getPayload(req.headers.authorization);
+    let { idUser } = jwt.getPayload(req.headers.authorization);
 
     // const result = await Photo.find();
 
-    return res.status(200).json({ message: result })
+    return res.status(200).json({ message: result, status: 200 })
   } catch (error) {
-    return res.status(500).json({ errors: error.stack });
+    return res.status(500).json({ errors: error.stack, status: 500 });
   }
 }
 
@@ -172,7 +185,7 @@ UserController.createProyect = async (req, res) => {
 
   try {
     if (!errors.isEmpty()) {
-      return res.status(422).json({ error: errors.array() });
+      return res.status(422).json({ error: errors.array(), status: 422 });
     }
 
     const proyect = new Proyect({
@@ -186,9 +199,9 @@ UserController.createProyect = async (req, res) => {
       challenges: data.challenges,
     }), resultProyect = await proyect.save(); //guardando proyecto
 
-    return res.status(200).json({ message: resultProyect });
+    return res.status(200).json({ message: resultProyect, status: 200 });
   } catch (error) {
-    return res.status(500).json({ errors: error.stack });
+    return res.status(500).json({ errors: error.stack, status: 500 });
   }
 }
 
@@ -210,12 +223,15 @@ UserController.updateProyect = async (req, res) => {
 
   try {
     if (!errors.isEmpty()) {
-      return res.status(422).json({ error: errors.array() });
+      return res.status(422).json({
+        error: errors.array(),
+        status: 422
+      });
     }
 
-    const proyectExists = await Proyect.find({_id: data.idProyect});
+    const proyectExists = await Proyect.find({ _id: data.idProyect });
     console.log(proyectExists)
-    if(proyectExists){
+    if (proyectExists) {
       const proyect = new Proyect({
         short_desc: data.shortDescription,
         category: data.category,
@@ -227,7 +243,7 @@ UserController.updateProyect = async (req, res) => {
       });
 
       console.log(req.body.collaborators)
-      if(req.body.collaborators){
+      if (req.body.collaborators) {
         proyect.collaborators = req.body.collaborators
       }
 
@@ -235,10 +251,10 @@ UserController.updateProyect = async (req, res) => {
       //   proyect
       // }
       // if(req.body.longDescriptions){
-        
+
       // }
       // if(req.body.payment){
-        
+
       // }
 
       // if(req.body.sponsors){
@@ -247,12 +263,12 @@ UserController.updateProyect = async (req, res) => {
 
       const proyectUpdated = Proyect.findByIdAndUpdate(data.idProyect, proyect);
       console.log(proyectUpdated);
-      return res.status(200).json({ message: proyectUpdated });
-    }else {
-      return res.status(202).json({ message: 'Noy exists this proyect' });
+      return res.status(200).json({ message: proyectUpdated, status: 200 });
+    } else {
+      return res.status(202).json({ message: 'Noy exists this proyect', status: 202 });
     }
   } catch (error) {
-    return res.status(500).json({ errors: error.stack });
+    return res.status(500).json({ errors: error.stack, status: 500 });
   }
 }
 
@@ -269,20 +285,30 @@ UserController.updateProfilePicture = async (req, res) => {
   });
 
   try {
-    const result = await cloudinary.uploader.upload(req.file.path);
 
-    // Falta cambiar que se integre en el mismo usuario
-    let newPhoto = new Photo({
-      imageURL: result.url,
-      imageId: result.public_id
+    let { idUser } = jwt.getPayload(req.headers.authorization);
+
+    const resultUploadedImage = await cloudinary.uploader.upload(req.file.path);
+
+    await User.updateOne({ _id: idUser }, {
+      image: {
+        imageURL: resultUploadedImage.url,
+        imageId: resultUploadedImage.public_id,
+      }
     });
 
-    await newPhoto.save();
     await fs.unlink(req.file.path);
 
-    return res.status(200).json({ message: 'upload' })
+    return res.status(200).json({
+      message: 'Update photo profile',
+      url: resultUploadedImage.url,
+      status: 200
+    });
   } catch (error) {
-    return res.status(500).json({ error: error.stack });
+    return res.status(500).json({
+      error: error.stack,
+      status: 500
+    });
   }
 }
 

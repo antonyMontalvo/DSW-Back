@@ -43,7 +43,7 @@ Router
         check('endDate').exists().isISO8601(),
         check('challenges').exists().isString().isLength({min: 1}),
     ], UserController.createProyect)
-    .post('/upload', UploadFile.userPhoto, UserController.updateProfilePicture)
+    .post('/upload', authentication.isAuth, UploadFile.userPhoto, UserController.updateProfilePicture)
 
     // PUT
     .put('/proyects', authentication.isAuth, [

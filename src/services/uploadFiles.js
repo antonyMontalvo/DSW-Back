@@ -9,8 +9,6 @@ const fileSize = 1024 * 1024 * 4,
 const fileFilter = (req, file, cb) => {
     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
         cb(null, true)
-    } else if(file.mimetype === 'application/pdf'){
-        cb(null, true)
     } else {
         req.fileValidationError = 'The image not have a valid extension';
         return cb(null, false, new Error())
@@ -36,7 +34,6 @@ UploadFile.userPhoto = (req, res, next) => {
         fileFilter: fileFilter
     }).single('userPhoto')
 
-    console.log(req.file)
     uploadUserPhoto(req, res, (error) => {
         if (typeof req.file !== 'undefined') {
             if(error) return res.status(422).json({ error: 'Invalid file' })
