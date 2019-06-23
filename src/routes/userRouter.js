@@ -56,7 +56,7 @@ Router
         check('startDate').exists().isISO8601(),
         check('endDate').exists().isISO8601(),
         check('challenges').exists().isString().isLength({min: 1}),
-    ], UserController.updateProyect)
+    ], UserController.updateProyectDeveloper)
 
 
 module.exports = Router;

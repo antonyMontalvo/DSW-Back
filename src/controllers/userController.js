@@ -199,16 +199,19 @@ UserController.createProyect = async (req, res) => {
       challenges: data.challenges,
     }), resultProyect = await proyect.save(); //guardando proyecto
 
-    return res.status(200).json({ message: resultProyect, status: 200 });
+    let { idUser } = jwt.getPayload(req.headers.authorization);
+    const userUpdated = await User.findOneAndUpdate({ _id: idUser }, { $push: { my_proyects: resultProyect._id } }, { new: true, upsert: true });
+
+    return res.status(200).json({ message: userUpdated, status: 200 });
   } catch (error) {
     return res.status(500).json({ errors: error.stack, status: 500 });
   }
 }
 
 /* 
-  Update proyect
+  Update project in development status
 */
-UserController.updateProyect = async (req, res) => {
+UserController.updateProyectDeveloper = async (req, res) => {
   let data = {
     idProyect: req.body.idProyect,
     title: req.body.title,
@@ -229,23 +232,23 @@ UserController.updateProyect = async (req, res) => {
       });
     }
 
-    const proyectExists = await Proyect.find({ _id: data.idProyect });
-    console.log(proyectExists)
-    if (proyectExists) {
-      const proyect = new Proyect({
-        short_desc: data.shortDescription,
-        category: data.category,
-        ubication: data.ubication,
-        monetary_goal: data.monetaryGoal,
-        start_date: data.startDate,
-        end_date: data.endDate,
-        challenges: data.challenges,
-      });
+    const proyectUpdated = await Proyect.findOneAndUpdate({ _id: data.idProyect }, { $set: {  } }, { new: true});
+    console.log(proyectUpdated)
+    if (proyectUpdated) {
+      // const proyect = new Proyect({
+      //   short_desc: data.shortDescription,
+      //   category: data.category,
+      //   ubication: data.ubication,
+      //   monetary_goal: data.monetaryGoal,
+      //   start_date: data.startDate,
+      //   end_date: data.endDate,
+      //   challenges: data.challenges,
+      // });
 
-      console.log(req.body.collaborators)
-      if (req.body.collaborators) {
-        proyect.collaborators = req.body.collaborators
-      }
+      // console.log(req.body.collaborators)
+      // if (req.body.collaborators) {
+      //   proyect.collaborators = req.body.collaborators
+      // }
 
       // if(req.body.rewards){
       //   proyect
@@ -261,8 +264,8 @@ UserController.updateProyect = async (req, res) => {
 
       // }
 
-      const proyectUpdated = Proyect.findByIdAndUpdate(data.idProyect, proyect);
-      console.log(proyectUpdated);
+      // const proyectUpdated = Proyect.findByIdAndUpdate(data.idProyect, proyect);
+      // console.log(proyectUpdated);
       return res.status(200).json({ message: proyectUpdated, status: 200 });
     } else {
       return res.status(202).json({ message: 'Noy exists this proyect', status: 202 });
@@ -271,6 +274,14 @@ UserController.updateProyect = async (req, res) => {
     return res.status(500).json({ errors: error.stack, status: 500 });
   }
 }
+
+/* 
+  Update proyect in publication status
+*/
+
+/* 
+  Update status of complete proyect
+*/
 
 /* 
   Update only profile picture
