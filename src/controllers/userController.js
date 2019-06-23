@@ -286,16 +286,16 @@ UserController.updateProfilePicture = async (req, res) => {
 
   try {
 
-    let { idUser } = jwt.getPayload(req.headers.authorization);
+    // let { idUser } = jwt.getPayload(req.headers.authorization);
 
     const resultUploadedImage = await cloudinary.uploader.upload(req.file.path);
 
-    await User.updateOne({ _id: idUser }, {
-      image: {
-        imageURL: resultUploadedImage.url,
-        imageId: resultUploadedImage.public_id,
-      }
-    });
+    // await User.updateOne({ _id: idUser }, {
+    //   image: {
+    //     imageURL: resultUploadedImage.url,
+    //     imageId: resultUploadedImage.public_id,
+    //   }
+    // });
 
     await fs.unlink(req.file.path);
 
