@@ -10,6 +10,48 @@ const jwt = require('../services/JWT'),
 
 //////////////////////////////// Not Authenticate controllers
 
+//////////////////////////////// GET
+
+UserController.getProyects = async (req, res) => {
+  try {
+    const proyects = await Proyect.find({}, { _id: 0, title: 1, short_desc: 1, category: 1, sponsors: 1 });
+
+    const news = await Proyect.aggregate([
+      {
+        $group: {
+          _id: "$_id",
+          suma: { $sum: "$monetary_goal" }
+        }
+      }
+    ])
+    console.log(news)
+
+    return proyects
+      ? res.status(200).json({ message: news, status: 200 })
+      : res.status(202).json({ message: [], status: 202 });
+
+  } catch (error) {
+    return res.status(500).json({ errors: error.stack, status: 500 });
+  }
+}
+
+/* 
+  Get all proyects filter category
+*/
+UserController.getProyectsByCategory = async (req, res) => {
+  try {
+    const proyects = await Proyect.find({ category: req.params.category });
+    return proyects
+      ? res.status(200).json({ message: proyects, status: 200 })
+      : res.status(202).json({ message: [], status: 202 });
+
+  } catch (error) {
+    return res.status(500).json({ errors: error.stack, status: 500 });
+  }
+}
+
+//////////////////////////////// POST
+
 /* 
   Register user
 */
@@ -158,9 +200,13 @@ UserController.getProfilePicture = async (req, res) => {
   try {
     let { idUser } = jwt.getPayload(req.headers.authorization);
 
-    // const result = await Photo.find();
+    const result = await User.findOne({ _id: idUser }, { _id: 0, image: 1 });
 
-    return res.status(200).json({ message: result, status: 200 })
+    if (result.image) {
+      return res.status(200).json({ message: result.image, status: 200 })
+    } else {
+      return res.status(202).json({ message: 'Not have image profile', status: 202 })
+    }
   } catch (error) {
     return res.status(500).json({ errors: error.stack, status: 500 });
   }
@@ -177,10 +223,6 @@ UserController.createProyect = async (req, res) => {
     shortDescription: req.body.shortDescription,
     category: req.body.category,
     ubication: req.body.ubication,
-    monetaryGoal: req.body.monetaryGoal,
-    startDate: req.body.startDate,
-    endDate: req.body.endDate,
-    challenges: req.body.challenges,
   }, errors = validationResult(req);
 
   try {
@@ -193,91 +235,18 @@ UserController.createProyect = async (req, res) => {
       short_desc: data.shortDescription,
       category: data.category,
       ubication: data.ubication,
-      monetary_goal: data.monetaryGoal,
-      start_date: data.startDate,
-      end_date: data.endDate,
-      challenges: data.challenges,
     }), resultProyect = await proyect.save(); //guardando proyecto
 
     let { idUser } = jwt.getPayload(req.headers.authorization);
     const userUpdated = await User.findOneAndUpdate({ _id: idUser }, { $push: { my_proyects: resultProyect._id } }, { new: true, upsert: true });
 
-    return res.status(200).json({ message: userUpdated, status: 200 });
-  } catch (error) {
-    return res.status(500).json({ errors: error.stack, status: 500 });
-  }
-}
-
-/* 
-  Update project in development status
-*/
-UserController.updateProyectDeveloper = async (req, res) => {
-  let data = {
-    idProyect: req.body.idProyect,
-    title: req.body.title,
-    shortDescription: req.body.shortDescription,
-    category: req.body.category,
-    ubication: req.body.ubication,
-    monetaryGoal: req.body.monetaryGoal,
-    startDate: req.body.startDate,
-    endDate: req.body.endDate,
-    challenges: req.body.challenges,
-  }, errors = validationResult(req);
-
-  try {
-    if (!errors.isEmpty()) {
-      return res.status(422).json({
-        error: errors.array(),
-        status: 422
-      });
-    }
-
-    const proyectUpdated = await Proyect.findOneAndUpdate({ _id: data.idProyect }, { $set: {  } }, { new: true});
-    console.log(proyectUpdated)
-    if (proyectUpdated) {
-      // const proyect = new Proyect({
-      //   short_desc: data.shortDescription,
-      //   category: data.category,
-      //   ubication: data.ubication,
-      //   monetary_goal: data.monetaryGoal,
-      //   start_date: data.startDate,
-      //   end_date: data.endDate,
-      //   challenges: data.challenges,
-      // });
-
-      // console.log(req.body.collaborators)
-      // if (req.body.collaborators) {
-      //   proyect.collaborators = req.body.collaborators
-      // }
-
-      // if(req.body.rewards){
-      //   proyect
-      // }
-      // if(req.body.longDescriptions){
-
-      // }
-      // if(req.body.payment){
-
-      // }
-
-      // if(req.body.sponsors){
-
-      // }
-
-      // const proyectUpdated = Proyect.findByIdAndUpdate(data.idProyect, proyect);
-      // console.log(proyectUpdated);
-      return res.status(200).json({ message: proyectUpdated, status: 200 });
-    } else {
-      return res.status(202).json({ message: 'Noy exists this proyect', status: 202 });
+    if (userUpdated) {
+      return res.status(200).json({ message: proyect, status: 200 });
     }
   } catch (error) {
     return res.status(500).json({ errors: error.stack, status: 500 });
   }
 }
-
-/* 
-  Update proyect in publication status
-*/
 
 /* 
   Update status of complete proyect
@@ -321,5 +290,167 @@ UserController.updateProfilePicture = async (req, res) => {
     });
   }
 }
+
+//////////////////////////////// PUT
+
+/* 
+  Update user profile
+*/
+UserController.updateProfile = async (req, res) => {
+  let data = {
+    userName: req.body.userName,
+    userFirstName: req.body.userFirstName,
+    userLastName: req.body.userLastName,
+    userSurName: req.body.userSurName,
+    userPassword: await bcrypt.hash(req.body.userPassword, 10),
+    userPhone: req.body.userPhone,
+    userBornDate: req.body.userBornDate,
+    userInterests: req.body.userInterests,
+  }, errors = validationResult(req);
+
+  try {
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        error: errors.array(),
+        status: 422
+      });
+    }
+
+    let { idUser, person } = jwt.getPayload(req.headers.authorization);
+    const userUpdated = await User.findOneAndUpdate({ _id: idUser }, {
+      username: data.userName,
+      password: data.userPassword,
+      born_date: data.userBornDate,
+      interests: data.userInterests,
+    }, { new: true });
+
+    const personUpdated = await Person.findOneAndUpdate({ _id: person }, {
+      first_name: data.userFirstName,
+      lastname_1: data.userLastName,
+      lastname_2: data.userSurName,
+      phone: data.userPhone
+    }, { new: true });
+
+    let objectResult = {
+      userName: userUpdated.username,
+      userEmail: userUpdated.email,
+      userFirstName: personUpdated.first_name,
+      userLastName: personUpdated.lastname_1,
+      userSurName: personUpdated.lastname_2,
+      userPhone: personUpdated.phone,
+      userPhoto: userUpdated.image,
+      token: jwt.createToken({
+        idUser: userUpdated._id,
+        username: userUpdated.username,
+        password: userUpdated.password,
+        person: userUpdated.person
+      }),
+    };
+
+    return res.status(200).json({
+      message: objectResult,
+      status: 200
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      errors: error.stack,
+      status: 500
+    });
+  }
+}
+
+/* 
+  Update project in development status
+*/
+UserController.updateProyectDeveloper = async (req, res) => {
+  let data = {
+    idProyect: req.body.idProyect,
+    title: req.body.title,
+    shortDescription: req.body.shortDescription,
+    category: req.body.category,
+    ubication: req.body.ubication,
+    monetaryGoal: req.body.monetaryGoal,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
+    challenges: req.body.challenges,
+    linkVideo: req.body.linkVideo,
+    friends: req.body.friends,
+    reward: req.body.reward,
+    longDescriptions: req.body.longDescriptions,
+    paymentAccount: req.body.paymentAccount
+  }, errors = validationResult(req);
+
+  try {
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        error: errors.array(),
+        status: 422
+      });
+    }
+
+    const proyectUpdated = await Proyect.findOneAndUpdate({ _id: data.idProyect }, {
+      title: data.title,
+      short_desc: data.shortDescription,
+      category: data.category,
+      ubication: data.ubication,
+      monetary_goal: data.monetaryGoal,
+      start_date: data.startDate,
+      end_date: data.endDate,
+      challenges: data.challenges,
+      link_video: data.linkVideo,
+      friends: data.friends,
+      reward: data.reward,
+      long_desc: data.longDescriptions,
+      payment_account: data.paymentAccount
+    }, { new: true });
+
+    return res.status(200).json({ message: proyectUpdated, status: 200 });
+  } catch (error) {
+    return res.status(500).json({ errors: error.stack, status: 500 });
+  }
+}
+
+/* 
+  Update proyect in publication status
+*/
+UserController.updateProyectProduction = async (req, res) => {
+  let data = {
+    idProyect: req.body.idProyect,
+    title: req.body.title,
+    shortDescription: req.body.shortDescription,
+    linkVideo: req.body.linkVideo,
+    friends: req.body.friends,
+    reward: req.body.reward,
+    longDescriptions: req.body.longDescriptions,
+    paymentAccount: req.body.paymentAccount
+  }, errors = validationResult(req);
+
+  try {
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        error: errors.array(),
+        status: 422
+      });
+    }
+
+    const proyectUpdated = await Proyect.findOneAndUpdate({ _id: data.idProyect }, {
+      title: data.title,
+      short_desc: data.shortDescription,
+      link_video: data.linkVideo,
+      friends: data.friends,
+      reward: data.reward,
+      long_desc: data.longDescriptions,
+      payment_account: data.paymentAccount
+    }, { new: true });
+
+    return res.status(200).json({ message: proyectUpdated, status: 200 });
+  } catch (error) {
+    return res.status(500).json({ errors: error.stack, status: 500 });
+  }
+}
+
+
+
 
 module.exports = UserController;

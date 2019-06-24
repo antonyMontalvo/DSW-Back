@@ -8,7 +8,12 @@ const UserSchema = new Schema({
     email: { type: String, required: true },
     born_date: { type: Date, required: false },
     interests: { type: [String], required: false },
-    image: { type: Photo, required: false },
+    image: {
+        type: Photo, required: false, default: {
+            imageURL: 'https://res.cloudinary.com/cloudinaryantony/image/upload/v1560870724/fetniak2u6pccnt6xnns.png',
+            imageId: 'fetniak2u6pccnt6xnns'
+        }
+    },
     my_proyects: { type: [Schema.Types.ObjectId], required: false },
     patr_proyects: { // Patrocinadores
         type: [{
