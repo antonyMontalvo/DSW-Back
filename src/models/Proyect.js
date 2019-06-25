@@ -10,11 +10,11 @@ const ProyectSchema = new Schema({
     short_desc: { type: String, required: true },
     category: { type: String, required: true },
     ubication: { type: String, required: true },
-    monetary_goal: { type: Number, required: false, default: 0  },
-    start_date: { type: Date, required: false, default: null  },
-    end_date: { type: Date, required: false, default: null  },
-    challenges: { type: String, required: false, default: ''  },
-    link_video: { type: String, required: false, default: '' },
+    monetary_goal: { type: Number, required: false, default: null },
+    start_date: { type: Date, required: false, default: null },
+    end_date: { type: Date, required: false, default: null },
+    challenges: { type: String, required: false, default: null },
+    link_video: { type: String, required: false, default: null },
     friends: { type: [String], required: false },
     collaborators: { type: [Schema.Types.objectId], required: false },
     reward: { // Recompensas
@@ -29,7 +29,7 @@ const ProyectSchema = new Schema({
     sponsors: { // Colaboradores
         type: [Sponsor], required: false
     },
-    percentage: { type: Number, required: true, max: 100, default: 33.3 },
+    percentage: { type: Number, required: true, max: 100, default: 40 },
 });
 
 /* let proyectUpdated1 = [];

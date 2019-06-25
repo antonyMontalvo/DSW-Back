@@ -8,6 +8,8 @@ UserController = require('../controllers/userController')
 UploadFile = require('../services/uploadFiles');
 
 Router
+    .get('/proyects', UserController.getProyects)
+    .get('/proyects/:category', UserController.getProyectsByCategory)
     .post('/signup', [
         check('userEmail').exists().isString().isEmail(),
         check('userFirstName').exists().isString(),
@@ -18,9 +20,7 @@ Router
     .post('/signin', [
         check('userEmail').exists().isString().isEmail(),
         check('userPassword').exists().isString()
-    ], UserController.signin)
-    .get('/proyects', UserController.getProyects)
-    .get('/proyects/:category', UserController.getProyectsByCategory);
+    ], UserController.signin);
 
 /*
     Authentication
@@ -68,6 +68,9 @@ Router
         check('userPassword').exists().isString(),
         check('userPhone').exists().isMobilePhone()
     ], UserController.updateProfile)
+    .put('/proyects/update/status', authentication.isAuth, [
+        check('idProyect').exists().isMongoId(),
+    ], UserController.updateStatus)
 
 
 module.exports = Router;

@@ -249,10 +249,6 @@ UserController.createProyect = async (req, res) => {
 }
 
 /* 
-  Update status of complete proyect
-*/
-
-/* 
   Update only profile picture
 */
 UserController.updateProfilePicture = async (req, res) => {
@@ -450,7 +446,41 @@ UserController.updateProyectProduction = async (req, res) => {
   }
 }
 
+/* 
+  Update status of complete proyect
+*/
+UserController.updateStatus = async (req, res) => {
+  let data = {
+    idProyect: req.body.idProyect,
+  }, errors = validationResult(req);
 
+  try {
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        error: errors.array(),
+        status: 422
+      });
+    }
+    let { idUser } = jwt.getPayload(req.headers.authorization),
+      proyectExists = {};
+    const userProyect = await User.findOne({ _id: idUser, my_proyects: data.idProyect }, { _id: 0, my_proyects: 1 });
 
+    if (userProyect) {
+      proyectExists = await Proyect.findOne({ _id: userProyect.my_proyects[0] });
+
+      if (proyectExists.monetary_goal.state) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
+      if (proyectExists.start_date.state) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
+      if (proyectExists.end_date.state) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
+      if (proyectExists.challenges.state) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
+      if (proyectExists.reward.state) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
+      if (proyectExists.long_desc.state) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
+      return res.status(200).json({ message: proyectExists, status: 200 });
+    } else {
+      return res.status(200).json({ message: 'Not exists this proyect', status: 202 });
+    }
+  } catch (error) {
+    return res.status(500).json({ errors: error.stack, status: 500 });
+  }
+}
 
 module.exports = UserController;

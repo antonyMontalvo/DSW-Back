@@ -14,7 +14,7 @@ const UserSchema = new Schema({
             imageId: 'fetniak2u6pccnt6xnns'
         }
     },
-    my_proyects: { type: [Schema.Types.ObjectId], required: false },
+    my_proyects: { type: [Schema.Types.ObjectId], required: false, default: [] },
     patr_proyects: { // Patrocinadores
         type: [{
             _id: { type: Schema.Types.ObjectId, required: false },
