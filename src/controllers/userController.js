@@ -27,7 +27,7 @@ UserController.getProyects = async (req, res) => {
     console.log(news)
 
     return proyects
-      ? res.status(200).json({ message: news, status: 200 })
+      ? res.status(200).json({ message: proyects, status: 200 })
       : res.status(202).json({ message: [], status: 202 });
 
   } catch (error) {
