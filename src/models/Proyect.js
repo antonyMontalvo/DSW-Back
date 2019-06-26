@@ -4,6 +4,7 @@ const Payment = require('./ProyectPayment');
 const Reward = require('./ProyectReward');
 const LongDescription = require('./ProyectLongDescription');
 const Sponsor = require('./ProyectSponsor');
+const Image = require('./ProyectImage');
 
 const ProyectSchema = new Schema({
     title: { type: String, required: true },
@@ -17,6 +18,12 @@ const ProyectSchema = new Schema({
     link_video: { type: String, required: false, default: null },
     friends: { type: [String], required: false },
     collaborators: { type: [Schema.Types.objectId], required: false },
+    image: {
+        type: Image, required: false, default: {
+            imageURL: 'https://res.cloudinary.com/cloudinaryantony/image/upload/v1561518981/dou3dwftzkhozfx13ecp.jpg',
+            imageId: 'dou3dwftzkhozfx13ecp'
+        }
+    },
     reward: { // Recompensas
         type: [Reward], required: false
     },
@@ -30,6 +37,7 @@ const ProyectSchema = new Schema({
         type: [Sponsor], required: false
     },
     percentage: { type: Number, required: true, max: 100, default: 40 },
+    status_publication: { type: Boolean, required: true, default: false }
 });
 
 /* let proyectUpdated1 = [];

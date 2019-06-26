@@ -14,17 +14,18 @@ const jwt = require('../services/JWT'),
 
 UserController.getProyects = async (req, res) => {
   try {
-    const proyects = await Proyect.find({}, { _id: 0, title: 1, short_desc: 1, category: 1, sponsors: 1 });
+    const proyects = await Proyect.find({status_publication: false});
 
-    const news = await Proyect.aggregate([
-      {
-        $group: {
-          _id: "$_id",
-          suma: { $sum: "$monetary_goal" }
-        }
-      }
-    ])
-    console.log(news)
+    // console.log(proyects)
+    // const news = await Proyect.aggregate([
+    //   {
+    //     $group: {
+    //       _id: "$_id",
+    //       suma: { $sum: "$monetary_goal" }
+    //     }
+    //   }
+    // ])
+    // console.log(news)
 
     return proyects
       ? res.status(200).json({ message: proyects, status: 200 })
