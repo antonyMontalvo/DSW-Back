@@ -181,9 +181,9 @@ UserController.payStripe = async (req, res) => {
     });
 
     const charge = await stripe.charges.create({
-      amount: '3000',
+      amount: '500',
       description: 'Contribucion',
-      currency: 'pen',
+      currency: 'usd',
       customer: customer.id,
       receipt_email: req.body.stripeEmail,
     });
