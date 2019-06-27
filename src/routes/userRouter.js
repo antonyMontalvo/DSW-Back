@@ -10,7 +10,6 @@ UploadFile = require('../services/uploadFiles');
 Router
     .get('/proyects', UserController.getProyects)
     .get('/proyects/:category', UserController.getProyectsByCategory)
-    .get('/proyect/:id', UserController.getProyectsById)
     
     .post('/signup', [
         check('userEmail').exists().isString().isEmail(),
@@ -36,6 +35,7 @@ Router
     })
     .get('/users/picture', UserController.getProfilePicture)
     .get('/users/proyect', authentication.isAuth, UserController.getProyectsByUser)
+    .get('/proyect/:id', authentication.isAuth, UserController.getProyectsById)
 
     // POST
     .post('/proyects', authentication.isAuth, [

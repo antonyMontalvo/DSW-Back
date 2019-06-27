@@ -17,7 +17,7 @@ UserController.getProyects = async (req, res) => {
     const proyects = await Proyect.find({ status_publication: false });
 
     return proyects
-      ? res.status(201).json({ message: proyects, status: 201 })
+      ? res.status(200).json({ message: proyects, status: 200 })
       : res.status(202).json({ message: [], status: 202 });
 
   } catch (error) {
@@ -32,7 +32,7 @@ UserController.getProyectsByCategory = async (req, res) => {
   try {
     const proyects = await Proyect.find({ category: req.params.category });
     return proyects
-      ? res.status(201).json({ message: proyects, status: 201 })
+      ? res.status(200).json({ message: proyects, status: 200 })
       : res.status(202).json({ message: [], status: 202 });
 
   } catch (error) {
@@ -150,9 +150,9 @@ UserController.signin = async (req, res) => {
           };
 
         return response == true
-          ? res.status(201).json({
+          ? res.status(200).json({
             message: objectResult,
-            status: 201
+            status: 200
           })
           : res.status(202).json({ message: 'Email or password wrong', status: 202 });
       })
@@ -175,7 +175,7 @@ UserController.getRankedProyects = async (req, res) => {
     const proyects = await Proyect.find();
     console.log(proyects)
     return proyects
-      ? res.status(201).json({ message: proyects, status: 201 })
+      ? res.status(200).json({ message: proyects, status: 200 })
       : res.status(202).json({ message: '', status: 202 });
 
   } catch (error) {
@@ -193,7 +193,7 @@ UserController.getProfilePicture = async (req, res) => {
     const result = await User.findOne({ _id: idUser }, { _id: 0, image: 1 });
 
     if (result.image) {
-      return res.status(201).json({ message: result.image, status: 201 })
+      return res.status(200).json({ message: result.image, status: 200 })
     } else {
       return res.status(202).json({ message: 'Not have image profile', status: 202 })
     }
@@ -222,7 +222,7 @@ UserController.getProyectsByUser = async (req, res) => {
     ]);
 
     return proyectsByUser.length
-      ? res.status(201).json({ message: proyectsByUser[0].projects, status: 201 })
+      ? res.status(200).json({ message: proyectsByUser[0].projects, status: 200 })
       : res.status(202).json({ message: [], status: 202 });
 
   } catch (error) {
@@ -235,10 +235,10 @@ UserController.getProyectsByUser = async (req, res) => {
 */
 UserController.getProyectsById = async (req, res) => {
   try {
-    const proyect = await Proyect.findOne({ _id: req.params.id });
+    const proyect = await Proyect.findById(req.params.id);
 
     return proyect
-      ? res.status(201).json({ message: proyect, status: 201 })
+      ? res.status(200).json({ message: proyect, status: 200 })
       : res.status(202).json({ message: {}, status: 202 });
 
   } catch (error) {
@@ -275,7 +275,7 @@ UserController.createProyect = async (req, res) => {
     const userUpdated = await User.findOneAndUpdate({ _id: idUser }, { $push: { my_proyects: resultProyect._id } }, { new: true, upsert: true });
 
     if (userUpdated) {
-      return res.status(200).json({ message: proyect, status: 200 });
+      return res.status(201).json({ message: proyect, status: 201 });
     }
   } catch (error) {
     return res.status(500).json({ errors: error.stack, status: 500 });
@@ -354,7 +354,7 @@ UserController.postulateProyect = async (req, res) => {
       }
     }, { new: true });
 
-    return res.status(201).json({ message: newProyect, status: 201 });
+    return res.status(200).json({ message: newProyect, status: 200 });
   } catch (error) {
     return res.status(500).json({ errors: error.stack, status: 500 });
   }
@@ -416,9 +416,9 @@ UserController.updateProfile = async (req, res) => {
       }),
     };
 
-    return res.status(201).json({
+    return res.status(200).json({
       message: objectResult,
-      status: 201
+      status: 200
     });
 
   } catch (error) {
@@ -474,7 +474,7 @@ UserController.updateProyectDeveloper = async (req, res) => {
       payment_account: data.paymentAccount
     }, { new: true });
 
-    return res.status(201).json({ message: proyectUpdated, status: 201 });
+    return res.status(200).json({ message: proyectUpdated, status: 200 });
   } catch (error) {
     return res.status(500).json({ errors: error.stack, status: 500 });
   }
@@ -513,7 +513,7 @@ UserController.updateProyectProduction = async (req, res) => {
       payment_account: data.paymentAccount
     }, { new: true });
 
-    return res.status(201).json({ message: proyectUpdated, status: 201 });
+    return res.status(200).json({ message: proyectUpdated, status: 200 });
   } catch (error) {
     return res.status(500).json({ errors: error.stack, status: 500 });
   }
@@ -541,12 +541,12 @@ UserController.updateStatus = async (req, res) => {
     if (userProyect) {
       proyectExists = await Proyect.findOne({ _id: userProyect.my_proyects[0] });
 
-      if (proyectExists.monetary_goal) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
-      if (proyectExists.start_date) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
-      if (proyectExists.end_date) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
-      if (proyectExists.challenges) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
-      if (proyectExists.reward) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
-      if (proyectExists.long_desc) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
+      if (proyectExists.monetary_goal.state) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
+      if (proyectExists.start_date.state) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
+      if (proyectExists.end_date.state) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
+      if (proyectExists.challenges.state) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
+      if (proyectExists.reward.state) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
+      if (proyectExists.long_desc.state) proyectExists = await Proyect.findOneAndUpdate({ _id: userProyect.my_proyects[0] }, { $inc: { percentage: 10 } }, { new: true });
       return res.status(200).json({ message: proyectExists, status: 200 });
     } else {
       return res.status(202).json({ message: 'Not exists this proyect', status: 202 });
