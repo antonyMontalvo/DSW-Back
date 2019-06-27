@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Simple Store</title>
+    <!-- BOOTSTRAP 4 -->
+    <link rel="stylesheet" href="https://bootswatch.com/4/sandstone/bootstrap.min.css">
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <!-- CUSTOM CSS -->
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+
+    <div class="row">
+        <div class="col-md-4 mx-auto">
+                <div class="card-footer">
+                    <form action="./checkout" method="POST">
+                        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                            data-key="pk_test_yfDMd0dunbSjiVQlNSEfydgP0004FfVavq" data-amount="999" data-name="Stardash"
+                            data-description="Widget"
+                            data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                            data-locale="auto" data-currency="pen">
+                            </script>
+                    </form>
+                </div>
+        </div>
+    </div>
+</body>
+
+</html>

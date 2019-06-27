@@ -2,6 +2,7 @@ const morgan = require('morgan'),
   cors = require('cors'),
   path = require('path'),
   express = require('express'),
+  expbhs = require('express-handlebars'),
   app = express();
 
 const PORT = (process.env.PROYECT_PORT || 5000),
@@ -16,6 +17,12 @@ if (process.env.NODE_ENV !== 'production') {
 require('./config/database'); // mongoDB
 app.set('port', PORT);
 app.set('views', path.join(__dirname, 'views'));
+app.engine('.hbs', expbhs({
+  defaultLayout: 'main',
+  layoutsDir: path.join(app.get('views'), 'layouts'),
+  partialsDir: path.join(app.get('views'), 'partials'),
+  extname: '.hbs'
+}));
 
 /*
   Static files

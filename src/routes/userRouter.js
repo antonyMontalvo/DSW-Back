@@ -22,7 +22,8 @@ Router
     .post('/signin', [
         check('userEmail').exists().isString().isEmail(),
         check('userPassword').exists().isString()
-    ], UserController.signin);
+    ], UserController.signin)
+    .get('/payment', UserController.viewToPay);
 
 /*
     Authentication
@@ -53,6 +54,7 @@ Router
         check('phone').exists().isMobilePhone(),
     ], UserController.postulateProyect)
     .post('/upload', UploadFile.userPhoto, UserController.updateProfilePicture)
+    .post('/checkout', UserController.payStripe)
 
     // PUT
     .put('/proyects/developer', authentication.isAuth, [

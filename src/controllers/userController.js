@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs"),
   { validationResult } = require('express-validator/check'),
-  fs = require('fs-extra');
+  fs = require('fs-extra'),
+  stripe = require('stripe')('sk_test_w8PKLw1N1ajggHnIy15EdAjD008kRBoOUo');
 
 const jwt = require('../services/JWT'),
   User = require('../models/User'),
@@ -39,6 +40,11 @@ UserController.getProyectsByCategory = async (req, res) => {
     return res.status(500).json({ errors: error.stack, status: 500 });
   }
 }
+
+UserController.viewToPay = (req, res) => {
+  res.render('index.hbs')
+}
+
 
 //////////////////////////////// POST
 
@@ -158,6 +164,33 @@ UserController.signin = async (req, res) => {
       })
       : res.status(202).json({ message: 'Email or password wrong', status: 202 });
 
+  } catch (error) {
+    return res.status(500).json({ errors: error.stack, status: 500 });
+  }
+}
+
+/* 
+  Pago
+*/
+UserController.payStripe = async (req, res) => {
+  console.log(req.body)
+  try {
+    const customer = await stripe.customers.create({
+      email: req.body.stripeEmail,
+      source: req.body.stripeToken
+    });
+
+    const charge = await stripe.charges.create({
+      amount: '3000',
+      description: 'Contribucion',
+      currency: 'pen',
+      customer: customer.id,
+      receipt_email: req.body.stripeEmail,
+    });
+    // Save this charge in your database
+    console.log(charge.id);
+    // Finally Show a Success View
+    return res.json({message: 'nuevo'});
   } catch (error) {
     return res.status(500).json({ errors: error.stack, status: 500 });
   }
