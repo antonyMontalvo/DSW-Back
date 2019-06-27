@@ -33,6 +33,7 @@ Router
         res.sendFile(path.join(__dirname + '/../views/home.html'));
     })
     .get('/users/picture', UserController.getProfilePicture)
+    .get('/users/proyect', authentication.isAuth, UserController.getProyectsByUser)
 
     // POST
     .post('/proyects', authentication.isAuth, [

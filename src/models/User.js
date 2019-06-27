@@ -6,6 +6,7 @@ const UserSchema = new Schema({
     password: { type: String, required: true },
     person: { type: Schema.Types.ObjectId, required: true },
     email: { type: String, required: true },
+    // biografia
     born_date: { type: Date, required: false },
     interests: { type: [String], required: false },
     image: {
@@ -14,7 +15,7 @@ const UserSchema = new Schema({
             imageId: 'fetniak2u6pccnt6xnns'
         }
     },
-    my_proyects: { type: [Schema.Types.ObjectId], required: false, default: [] },
+    my_proyects: { type: [Schema.Types.ObjectId], ref: 'proyects' ,required: false, default: [] },
     patr_proyects: { // Patrocinadores
         type: [{
             _id: { type: Schema.Types.ObjectId, required: false },

@@ -14,21 +14,23 @@ const jwt = require('../services/JWT'),
 
 UserController.getProyects = async (req, res) => {
   try {
-    const proyects = await Proyect.find({status_publication: false});
+    const proyects = await Proyect.find({ status_publication: false });
 
-    // console.log(proyects)
-    // const news = await Proyect.aggregate([
-    //   {
-    //     $group: {
-    //       _id: "$_id",
-    //       suma: { $sum: "$monetary_goal" }
-    //     }
-    //   }
-    // ])
-    // console.log(news)
+    const join = await User.aggregate([
+      {
+        $lookup:
+        {
+          from: 'proyects',
+          localField: 'my_proyects',
+          foreignField: '_id',
+          as: 'orderdetails'
+        }
+      }
+    ])
 
+    console.log(join)
     return proyects
-      ? res.status(200).json({ message: proyects, status: 200 })
+      ? res.status(200).json({ message: join, status: 200 })
       : res.status(202).json({ message: [], status: 202 });
 
   } catch (error) {
@@ -103,7 +105,7 @@ UserController.signup = async (req, res) => {
         userPhoto: resultUser.image,
         token: jwt.createToken({
           idUser: resultUser._id,
-          username: resultUser.username,
+          email: resultUser.email,
           password: resultUser.password,
           person: resultUser.person
         }),
@@ -154,7 +156,7 @@ UserController.signin = async (req, res) => {
             userPhoto: userExists.image,
             token: jwt.createToken({
               idUser: userExists._id,
-              username: userExists.username,
+              email: userExists.email,
               password: userExists.password,
               person: userExists.person
             }),
@@ -208,6 +210,34 @@ UserController.getProfilePicture = async (req, res) => {
     } else {
       return res.status(202).json({ message: 'Not have image profile', status: 202 })
     }
+  } catch (error) {
+    return res.status(500).json({ errors: error.stack, status: 500 });
+  }
+}
+
+/* 
+  Get proectos by user
+*/
+UserController.getProyectsByUser = async (req, res) => {
+  try {
+    let { email } = jwt.getPayload(req.headers.authorization);
+    const proyectsByUser = await User.aggregate([
+      { $match: { email: email } },
+      {
+        $lookup:
+        {
+          from: 'proyects',
+          localField: 'my_proyects',
+          foreignField: '_id',
+          as: 'projects'
+        }
+      }
+    ]);
+
+    return proyectsByUser.length
+      ? res.status(200).json({ message: proyectsByUser[0].projects, status: 200 })
+      : res.status(202).json({ message: [], status: 202 });
+
   } catch (error) {
     return res.status(500).json({ errors: error.stack, status: 500 });
   }
@@ -338,7 +368,7 @@ UserController.updateProfile = async (req, res) => {
       userPhoto: userUpdated.image,
       token: jwt.createToken({
         idUser: userUpdated._id,
-        username: userUpdated.username,
+        email: userUpdated.email,
         password: userUpdated.password,
         person: userUpdated.person
       }),
