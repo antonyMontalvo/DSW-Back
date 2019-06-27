@@ -220,6 +220,7 @@ UserController.getProyectsByUser = async (req, res) => {
         }
       }
     ]);
+    console.log(proyectsByUser)
 
     return proyectsByUser.length
       ? res.status(200).json({ message: proyectsByUser[0].projects, status: 200 })
