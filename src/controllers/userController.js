@@ -16,21 +16,8 @@ UserController.getProyects = async (req, res) => {
   try {
     const proyects = await Proyect.find({ status_publication: false });
 
-    const join = await User.aggregate([
-      {
-        $lookup:
-        {
-          from: 'proyects',
-          localField: 'my_proyects',
-          foreignField: '_id',
-          as: 'orderdetails'
-        }
-      }
-    ])
-
-    console.log(join)
     return proyects
-      ? res.status(200).json({ message: join, status: 200 })
+      ? res.status(200).json({ message: proyects, status: 200 })
       : res.status(202).json({ message: [], status: 202 });
 
   } catch (error) {
@@ -216,7 +203,7 @@ UserController.getProfilePicture = async (req, res) => {
 }
 
 /* 
-  Get proectos by user
+  Get proyects by user
 */
 UserController.getProyectsByUser = async (req, res) => {
   try {
