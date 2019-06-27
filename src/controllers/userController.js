@@ -207,7 +207,7 @@ UserController.getProfilePicture = async (req, res) => {
 */
 UserController.getProyectsByUser = async (req, res) => {
   try {
-    let { idUser, email } = jwt.getPayload(req.headers.authorization);
+    let { email } = jwt.getPayload(req.headers.authorization);
     const proyectsByUser = await User.aggregate([
       { $match: { email: email } },
       {
@@ -220,8 +220,6 @@ UserController.getProyectsByUser = async (req, res) => {
         }
       }
     ]);
-    const proyectsBy = await User.findById(idUser).populate('proyects');
-    console.log(proyectsBy)
 
     return proyectsByUser.length
       ? res.status(200).json({ message: proyectsByUser[0].projects, status: 200 })
@@ -310,9 +308,13 @@ UserController.updateProfilePicture = async (req, res) => {
 /* 
   Postulate new proyect
 */
-UserController.postulateProyect= async (req, res) => {
+UserController.postulateProyect = async (req, res) => {
   let data = {
-    idProyect: req.body.idProyect,
+    name: req.body.name,
+    lastName: req.body.lastName,
+    dni: req.body.dni,
+    email: req.body.email,
+    phone: req.body.phone,
   }, errors = validationResult(req);
 
   try {

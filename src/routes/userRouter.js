@@ -42,6 +42,13 @@ Router
         check('category').exists().isString().isLength({ min: 1 }),
         check('ubication').exists().isString().isLength({ min: 1 }),
     ], UserController.createProyect)
+    .post('/proyects/postulate', authentication.isAuth, [
+        check('name').exists().isString().isLength({ min: 1 }),
+        check('lastName').exists().isString().isLength({ min: 1 }),
+        check('dni').exists().isString().isLength({ min: 8, max:8 }),
+        check('email').exists().isString().isEmail(),
+        check('phone').exists().isMobilePhone(),
+    ], UserController.createProyect)
     .post('/upload', UploadFile.userPhoto, UserController.updateProfilePicture)
 
     // PUT
