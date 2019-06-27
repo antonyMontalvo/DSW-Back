@@ -310,6 +310,7 @@ UserController.updateProfilePicture = async (req, res) => {
 */
 UserController.postulateProyect = async (req, res) => {
   let data = {
+    idProyect: req.body.idProyect,
     name: req.body.name,
     lastName: req.body.lastName,
     dni: req.body.dni,
@@ -324,15 +325,20 @@ UserController.postulateProyect = async (req, res) => {
         status: 422
       });
     }
-    let { idUser } = jwt.getPayload(req.headers.authorization);
 
-    if (userProyect) {
-      proyectExists = await Proyect.findOne({ _id: userProyect.my_proyects[0] });
+    let newProyect = await Proyect.findOneAndUpdate({ _id: data.idProyect }, {
+      $push: {
+        collaborators: {
+          name: data.name,
+          lastname: data.lastName,
+          dni: data.dni,
+          email: data.email,
+          phone: data.phone,
+        }
+      }
+    }, { new: true });
 
-      return res.status(200).json({ message: proyectExists, status: 200 });
-    } else {
-      return res.status(200).json({ message: 'Not exists this proyect', status: 202 });
-    }
+    return res.status(200).json({ message: newProyect, status: 200 });
   } catch (error) {
     return res.status(500).json({ errors: error.stack, status: 500 });
   }

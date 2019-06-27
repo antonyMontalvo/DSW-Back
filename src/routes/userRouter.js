@@ -43,12 +43,13 @@ Router
         check('ubication').exists().isString().isLength({ min: 1 }),
     ], UserController.createProyect)
     .post('/proyects/postulate', authentication.isAuth, [
+        check('idProyect').exists().isMongoId(),
         check('name').exists().isString().isLength({ min: 1 }),
         check('lastName').exists().isString().isLength({ min: 1 }),
         check('dni').exists().isString().isLength({ min: 8, max:8 }),
         check('email').exists().isString().isEmail(),
         check('phone').exists().isMobilePhone(),
-    ], UserController.createProyect)
+    ], UserController.postulateProyect)
     .post('/upload', UploadFile.userPhoto, UserController.updateProfilePicture)
 
     // PUT
