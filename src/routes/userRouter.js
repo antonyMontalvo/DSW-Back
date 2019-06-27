@@ -10,7 +10,8 @@ UploadFile = require('../services/uploadFiles');
 Router
     .get('/proyects', UserController.getProyects)
     .get('/proyects/:category', UserController.getProyectsByCategory)
-    
+    .get('/proyect/:id', UserController.getProyectsById)
+
     .post('/signup', [
         check('userEmail').exists().isString().isEmail(),
         check('userFirstName').exists().isString(),
@@ -35,7 +36,6 @@ Router
     })
     .get('/users/picture', UserController.getProfilePicture)
     .get('/users/proyect', authentication.isAuth, UserController.getProyectsByUser)
-    .get('/proyect/:id', authentication.isAuth, UserController.getProyectsById)
 
     // POST
     .post('/proyects', authentication.isAuth, [
@@ -48,7 +48,7 @@ Router
         check('idProyect').exists().isMongoId(),
         check('name').exists().isString().isLength({ min: 1 }),
         check('lastName').exists().isString().isLength({ min: 1 }),
-        check('dni').exists().isString().isLength({ min: 8, max:8 }),
+        check('dni').exists().isString().isLength({ min: 8, max: 8 }),
         check('email').exists().isString().isEmail(),
         check('phone').exists().isMobilePhone(),
     ], UserController.postulateProyect)
@@ -86,7 +86,7 @@ Router
         check('idProyect').exists().isMongoId(),
         check('name').exists().isString().isLength({ min: 1 }),
         check('lastName').exists().isString().isLength({ min: 1 }),
-        check('dni').exists().isString().isLength({ min: 8, max:8 }),
+        check('dni').exists().isString().isLength({ min: 8, max: 8 }),
         check('email').exists().isString().isEmail(),
         check('phone').exists().isMobilePhone(),
     ], UserController.postulateProyect)
