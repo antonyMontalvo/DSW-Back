@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-md-4 mx-auto">
+    <div class="card">
+      <img src="{{proyect.image.imageURL}}" alt="" class="card-img-top">
+      <h2>{{proyect.title}}</h2>
+      <div class="card-body">
+        <p>{{proyect.short_desc}}</p>
+      </div>
+      <div class="card-footer">
+        <form action="../checkout" method="POST">
+          <input type="text" name="proyectDescription" value="{{reward.description}}" hidden>
+          <input type="text" name="proyectAmount" value="{{proyect.monetary_goal}}00" hidden>
+          <input type="text" name="proyectId" value="{{proyect._id}}" hidden>
+          <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="pk_test_yfDMd0dunbSjiVQlNSEfydgP0004FfVavq" data-amount="{{proyect.monetary_goal}}00" data-name="StarDash"
+            data-description="{{reward.description}}" data-image="{{proyect.image.imageURL}}" data-locale="auto">
+            </script>
+          <script>
+            document.getElementsByClassName("stripe-button-el")[0].style.display = 'none';
+          </script>
+          <button type="submit" class="btn btn-dark btn-block">
+            Buy <i class="fas fa-shopping-cart"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

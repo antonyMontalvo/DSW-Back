@@ -11,25 +11,18 @@
     <!-- FONT AWESOME -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
         integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    <!-- CUSTOM CSS -->
-    <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
 
-    <div class="row">
-        <div class="col-md-4 mx-auto">
-            <div class="card-footer">
-                <form action="./checkout" method="POST">
-                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                        data-key="pk_test_yfDMd0dunbSjiVQlNSEfydgP0004FfVavq" data-amount="500" data-name="Stardash"
-                        data-description="Widget"
-                        data-image="https://stripe.com/img/documentation/checkout/marketplace.png" data-locale="auto"
-                        data-currency="usd">
-                        </script>
-                </form>
-            </div>
+    <nav class="navbar navbar-dark bg-primary p-2">
+        <div class="container">
+            <a class="navbar-brand" href="#">Software Store</a>
         </div>
+    </nav>
+
+    <div class="container p-4">
+        {{{ body }}}
     </div>
 </body>
 

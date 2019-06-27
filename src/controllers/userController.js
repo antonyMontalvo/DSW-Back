@@ -9,6 +9,9 @@ const jwt = require('../services/JWT'),
   Proyect = require('../models/Proyect'),
   UserController = {};
 
+var Mongoose = require('mongoose'),
+  ObjectId = Mongoose.Types.ObjectId;
+
 //////////////////////////////// Not Authenticate controllers
 
 //////////////////////////////// GET
@@ -41,8 +44,14 @@ UserController.getProyectsByCategory = async (req, res) => {
   }
 }
 
-UserController.viewToPay = (req, res) => {
-  res.render('index.hbs')
+UserController.viewToPay = async (req, res) => {
+  try {
+    const proyect = await Proyect.findById(ObjectId(req.params.id));
+
+    return res.render('index.hbs', { proyect: proyect, reward: proyect.reward[0] })
+  } catch (error) {
+    return res.status(500).json({ errors: error.stack, status: 500 });
+  }
 }
 
 
@@ -173,24 +182,39 @@ UserController.signin = async (req, res) => {
   Pago
 */
 UserController.payStripe = async (req, res) => {
-  console.log(req.body)
   try {
+    console.log(req.body)
     const customer = await stripe.customers.create({
       email: req.body.stripeEmail,
       source: req.body.stripeToken
     });
 
     const charge = await stripe.charges.create({
-      amount: '500',
-      description: 'Contribucion',
+      amount: req.body.proyectAmount,
+      description: req.body.proyectDescription,
       currency: 'usd',
       customer: customer.id,
       receipt_email: req.body.stripeEmail,
     });
-    // Save this charge in your database
-    console.log(charge.id);
-    // Finally Show a Success View
-    return res.json({message: 'nuevo'});
+
+    let pago = {};
+    if (charge) {
+      pago = await Proyect.findOneAndUpdate({ _id: ObjectId(req.body.proyectId) }, {
+        $push: {
+          sponsors: {
+            name: req.body.proyectDescription,
+            email: req.body.stripeEmail,
+            amount: req.body.proyectAmount
+          }
+        }
+      }, { new: true, upsert: true });
+
+      if (pago) {
+        return res.redirect('/');
+      }
+    }
+    return res.redirect('/');
+
   } catch (error) {
     return res.status(500).json({ errors: error.stack, status: 500 });
   }

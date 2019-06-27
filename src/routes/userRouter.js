@@ -23,7 +23,7 @@ Router
         check('userEmail').exists().isString().isEmail(),
         check('userPassword').exists().isString()
     ], UserController.signin)
-    .get('/payment', UserController.viewToPay);
+    .get('/payment/:id', UserController.viewToPay);
 
 /*
     Authentication
