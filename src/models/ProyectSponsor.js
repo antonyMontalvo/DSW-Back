@@ -2,7 +2,8 @@ const { Schema } = require('mongoose');
 
 const SponsorSchema = new Schema({
     _id: { type: Schema.Types.ObjectId, required: false },
-    id_sponsor: { type: Schema.Types.ObjectId, required: true },
+    name: { type: String, required: true, default: '' },
+    email: { type: String, required: true, default: '' },
     amount: { type: Number, required: true }
 });
 

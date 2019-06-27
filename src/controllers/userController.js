@@ -150,9 +150,9 @@ UserController.signin = async (req, res) => {
           };
 
         return response == true
-          ? res.status(200).json({
+          ? res.status(201).json({
             message: objectResult,
-            status: 200
+            status: 201
           })
           : res.status(202).json({ message: 'Email or password wrong', status: 202 });
       })
