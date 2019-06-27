@@ -10,6 +10,8 @@ UploadFile = require('../services/uploadFiles');
 Router
     .get('/proyects', UserController.getProyects)
     .get('/proyects/:category', UserController.getProyectsByCategory)
+    .get('/proyect/:id', UserController.getProyectsById)
+    
     .post('/signup', [
         check('userEmail').exists().isString().isEmail(),
         check('userFirstName').exists().isString(),
@@ -80,6 +82,14 @@ Router
     .put('/proyects/update/status', authentication.isAuth, [
         check('idProyect').exists().isMongoId(),
     ], UserController.updateStatus)
+    .put('/proyects/sponsor', authentication.isAuth, [
+        check('idProyect').exists().isMongoId(),
+        check('name').exists().isString().isLength({ min: 1 }),
+        check('lastName').exists().isString().isLength({ min: 1 }),
+        check('dni').exists().isString().isLength({ min: 8, max:8 }),
+        check('email').exists().isString().isEmail(),
+        check('phone').exists().isMobilePhone(),
+    ], UserController.postulateProyect)
 
 
 module.exports = Router;
