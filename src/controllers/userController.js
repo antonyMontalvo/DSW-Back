@@ -207,7 +207,7 @@ UserController.getProfilePicture = async (req, res) => {
 */
 UserController.getProyectsByUser = async (req, res) => {
   try {
-    let { email } = jwt.getPayload(req.headers.authorization);
+    let { idUser, email } = jwt.getPayload(req.headers.authorization);
     const proyectsByUser = await User.aggregate([
       { $match: { email: email } },
       {
@@ -220,6 +220,8 @@ UserController.getProyectsByUser = async (req, res) => {
         }
       }
     ]);
+    const proyectsBy = await User.findById(idUser).populate('proyects');
+    console.log(proyectsBy)
 
     return proyectsByUser.length
       ? res.status(200).json({ message: proyectsByUser[0].projects, status: 200 })
@@ -302,6 +304,35 @@ UserController.updateProfilePicture = async (req, res) => {
       error: error.stack,
       status: 500
     });
+  }
+}
+
+/* 
+  Postulate new proyect
+*/
+UserController.postulateProyect= async (req, res) => {
+  let data = {
+    idProyect: req.body.idProyect,
+  }, errors = validationResult(req);
+
+  try {
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        error: errors.array(),
+        status: 422
+      });
+    }
+    let { idUser } = jwt.getPayload(req.headers.authorization);
+
+    if (userProyect) {
+      proyectExists = await Proyect.findOne({ _id: userProyect.my_proyects[0] });
+
+      return res.status(200).json({ message: proyectExists, status: 200 });
+    } else {
+      return res.status(200).json({ message: 'Not exists this proyect', status: 202 });
+    }
+  } catch (error) {
+    return res.status(500).json({ errors: error.stack, status: 500 });
   }
 }
 
