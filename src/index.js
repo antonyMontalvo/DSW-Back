@@ -5,7 +5,7 @@ const morgan = require('morgan'),
   expbhs = require('express-handlebars'),
   app = express();
 
-const PORT = (process.env.PROYECT_PORT || 5000),
+const PORT = (process.env.PROYECT_PORT || process.env.PORT || 5000),
   indexRouter = require('./routes/index');
 
 /*
