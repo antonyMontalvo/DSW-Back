@@ -6,6 +6,7 @@ const morgan = require('morgan'),
   app = express();
 
 const PORT = (process.env.PROYECT_PORT || process.env.PORT || 5000),
+  HOST = process.env.YOUR_HOST || '0.0.0.0';
   indexRouter = require('./routes/index');
 
 /*
@@ -52,6 +53,6 @@ indexRouter.userRouter(app);
 /*
   Server start
 */
-app.listen(app.get('port'), () => {
+app.listen(app.get('port'), HOST, () => {
   console.log(`Server runing on: http://localhost:${app.get('port')}`);
 });
